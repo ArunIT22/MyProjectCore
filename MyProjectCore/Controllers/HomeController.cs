@@ -13,7 +13,8 @@ namespace MyProjectCore.Controllers
             _logger = logger;
         }
 
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client, VaryByHeader = "user-agent")]
+        // [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client, VaryByHeader = "user-agent")]
+       // [ResponseCache(CacheProfileName = "Private30Sec")]
         public IActionResult Index()
         {
             ViewBag.Today = $"Response was generated at {DateTime.Now}";

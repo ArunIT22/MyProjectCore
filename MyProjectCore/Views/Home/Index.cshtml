@@ -8,3 +8,9 @@
 </div>
 
 <h1>Today : @ViewBag.Today</h1>
+<hr />
+@*<cache expires-after="@TimeSpan.FromSeconds(10)">*@
+
+<cache expires-sliding="@TimeSpan.FromSeconds(10)">
+    Using Cache Tag Helper (Date and Time) : @DateTime.Now
+</cache>

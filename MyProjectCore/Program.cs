@@ -1,7 +1,20 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(config =>
+{
+    config.CacheProfiles.Add("Public30Sec", new Microsoft.AspNetCore.Mvc.CacheProfile
+    {
+        Duration = 30,
+        Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Any,
+        VaryByHeader = "user-agent"
+    });
+    config.CacheProfiles.Add("Private30Sec", new Microsoft.AspNetCore.Mvc.CacheProfile
+    {
+        Duration = 30,
+        Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Client
+    });
+});
 
 builder.Services.AddResponseCaching();
 
