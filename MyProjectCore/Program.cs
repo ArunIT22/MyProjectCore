@@ -1,3 +1,5 @@
+using MyProjectCore.Filters;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +16,11 @@ builder.Services.AddControllersWithViews(config =>
         Duration = 30,
         Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Client
     });
+
+    //Register Custom Filter
+    //config.Filters.Add(new MyCustomFiltersAttribute("Global", 0));
+
+    //config.Filters.Add(new NewCustomFilter("Global"));
 });
 
 builder.Services.AddResponseCaching();
@@ -37,7 +44,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Test}/{action=Index}/{id?}");
 
 app.UseResponseCaching();
 
