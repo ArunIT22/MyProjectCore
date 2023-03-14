@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using MyProjectCore.Filters;
+using MyProjectCore.Models;
+using MyProjectCore.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +27,22 @@ builder.Services.AddControllersWithViews(config =>
     //config.Filters.Add(new NewCustomFilter("Global"));
 });
 
+//Configure DI
+builder.Services.AddScoped<IRepository, AccountRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+{
+    option.LoginPath = "/Accounts/Login";
+});
+
+builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddResponseCaching();
+
+//Register the MyAsyncActionFilter to Service
+//builder.Services.AddScoped<MyAsyncActionFilter>();
+builder.Services.AddScoped<GlobalExceptionFilter>();
 
 var app = builder.Build();
 
@@ -35,10 +54,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
